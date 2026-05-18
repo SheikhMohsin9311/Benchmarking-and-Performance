@@ -1,0 +1,501 @@
+\documentclass[10pt]{article}
+
+\usepackage[
+  paperwidth=16cm,
+  paperheight=9cm,
+  margin=0cm
+]{geometry}
+\usepackage[table]{xcolor}
+\usepackage{array}
+\usepackage{microtype}
+
+\pagestyle{empty}
+\setlength{\parindent}{0pt}
+\setlength{\fboxrule}{0.35pt}
+
+\definecolor{Carbon}{HTML}{0A0A0A}
+\definecolor{Cream}{HTML}{FCFCFC}
+\definecolor{MutedGold}{HTML}{A16207}
+\definecolor{SlateGrey}{HTML}{444444}
+\definecolor{DeepGrey}{HTML}{151515}
+\definecolor{SoftGrey}{HTML}{B8B8B8}
+
+\newcounter{slideno}
+\newcommand{\repoid}{github.com/SheikhMohsin9311/Benchmarking-and-Performance}
+\newcommand{\presenter}{Sheikh Mohsin}
+\newcommand{\slidefooter}[1]{%
+  \vfill
+  {\color{MutedGold}\small\hfill #1\,/\,\pageref{LastSlide}}%
+}
+
+\newcommand{\titleslide}{%
+  \stepcounter{slideno}
+  \pagecolor{Carbon}
+  \color{Cream}
+  \begin{minipage}[t][8.72cm][c]{16cm}
+    \hspace*{1.05cm}
+    \begin{minipage}{13.9cm}
+      {\color{MutedGold}\Large Paper Presentation}
+
+      \vspace{0.45cm}
+      {\Huge\bfseries How to Build a Benchmark}
+
+      \vspace{0.35cm}
+      {\large\itshape Kistowski, Arnold, Lange, Henning, Huppler, and Cao}
+
+      \vspace{0.65cm}
+      {\color{SlateGrey}\large ICPE 2015 \quad | \quad Benchmarking and Performance}
+
+      \vspace{0.9cm}
+      {\color{SlateGrey}\rule{5.4cm}{0.4pt}}
+
+      \vspace{0.55cm}
+      {\color{SlateGrey}A practitioner's vocabulary for benchmark quality}
+
+      \vspace{0.75cm}
+      {\color{MutedGold}\small \presenter}
+
+      \vspace{0.12cm}
+      {\color{SlateGrey}\small \repoid}
+    \end{minipage}
+  \end{minipage}
+  \newpage
+}
+
+\newcommand{\sectionslide}[2]{%
+  \stepcounter{slideno}
+  \begin{minipage}[t][8.72cm][c]{16cm}
+    \hspace*{1.05cm}
+    \begin{minipage}{13.9cm}
+      {\color{MutedGold}\Large #1}
+
+      \vspace{0.45cm}
+      {\Huge\bfseries #2}
+
+      \vspace{0.65cm}
+      {\color{SlateGrey}\rule{4.2cm}{0.4pt}}
+    \end{minipage}
+  \end{minipage}
+  \newpage
+}
+
+\newcommand{\contentslide}[2]{%
+  \stepcounter{slideno}
+  \begin{minipage}[t][8.72cm][t]{16cm}
+    \vspace*{0.72cm}
+
+    \hspace*{0.82cm}
+    \begin{minipage}{14.35cm}
+      {\color{Cream}\Large\bfseries #1}
+
+      \vspace{0.18cm}
+      {\color{SlateGrey}\rule{3.2cm}{0.35pt}}
+
+      \vspace{0.48cm}
+      #2
+      \slidefooter{\arabic{slideno}}
+    \end{minipage}
+  \end{minipage}
+  \newpage
+}
+
+\newcommand{\tagline}[1]{{\color{MutedGold}\bfseries #1}}
+\newcommand{\muted}[1]{{\color{SlateGrey}#1}}
+\newcommand{\soft}[1]{{\color{SoftGrey}#1}}
+\newcommand{\emphasis}[1]{{\color{Cream}\bfseries #1}}
+\newcommand{\callout}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0.2cm}%
+  \fcolorbox{MutedGold}{Carbon}{%
+    \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+      \vspace{0.12cm}
+      {\color{Cream}\itshape #1}
+      \vspace{0.12cm}
+    \end{minipage}%
+  }
+  \endgroup
+}
+\newcommand{\darkbox}[1]{%
+  \begingroup
+  \setlength{\fboxsep}{0.2cm}%
+  \fcolorbox{SlateGrey}{DeepGrey}{%
+    \begin{minipage}{\dimexpr\linewidth-2\fboxsep-2\fboxrule\relax}
+      \vspace{0.1cm}
+      #1
+      \vspace{0.1cm}
+    \end{minipage}%
+  }
+  \endgroup
+}
+\newcommand{\twocol}[2]{%
+  \begin{minipage}[t]{6.75cm}#1\end{minipage}
+  \hfill
+  \begin{minipage}[t]{6.75cm}#2\end{minipage}
+}
+\newcommand{\threecol}[3]{%
+  \begin{minipage}[t]{4.35cm}#1\end{minipage}
+  \hfill
+  \begin{minipage}[t]{4.35cm}#2\end{minipage}
+  \hfill
+  \begin{minipage}[t]{4.35cm}#3\end{minipage}
+}
+\newcommand{\metric}[2]{%
+  \centering{\color{MutedGold}\Huge\bfseries #1}\\[0.25em]
+  {\color{SlateGrey}#2}
+}
+
+\begin{document}
+
+\pagecolor{Carbon}
+\color{Cream}
+
+\titleslide
+
+\contentslide{One-Sentence Reading}{
+  \vfill
+  \callout{An insider account from SPEC and TPC committee members on how standardized benchmarks are defined, governed, validated, and made usable.}
+  \vspace{0.65cm}
+
+  \twocol{
+    \tagline{What the paper gives us}
+    \begin{itemize}
+      \item A taxonomy of benchmark forms
+      \item A vocabulary for quality
+      \item A map of design trade-offs
+    \end{itemize}
+  }{
+    \tagline{Why it matters}
+    \begin{itemize}
+      \item Benchmarks turn measurements into claims
+      \item Claims need trust, context, and rules
+      \item The process is part of the result
+    \end{itemize}
+  }
+}
+
+\contentslide{Why This Paper Exists}{
+  Benchmark consortia such as \emphasis{SPEC} and \emphasis{TPC} accumulate practical knowledge under confidentiality agreements.
+
+  \vspace{0.35cm}
+  This paper opens that process enough for researchers to see how serious standardized benchmarks are shaped.
+
+  \vspace{0.5cm}
+  \threecol{
+    \tagline{SPEC}
+
+    \soft{SPEC CPU, SPECpower, SERT}
+  }{
+    \tagline{TPC}
+
+    \soft{TPC-C, TPC-H, TPC-DS}
+  }{
+    \tagline{Audience}
+
+    \soft{Benchmark designers, users, and critics}
+  }
+}
+
+\sectionslide{Part 1}{Definitions}
+
+\contentslide{Benchmark or Rating Tool?}{
+  \twocol{
+    \darkbox{
+      \tagline{Benchmark}
+
+      \vspace{0.14cm}
+      A standard tool for \emphasis{competitive} comparison of systems or components.
+    }
+
+    \vspace{0.28cm}
+    \begin{itemize}
+      \item Product comparison
+      \item Published ranking
+      \item Strict comparability pressure
+    \end{itemize}
+  }{
+    \darkbox{
+      \tagline{Rating tool}
+
+      \vspace{0.14cm}
+      A standard tool for \emphasis{non-competitive} evaluation, regulation, research, or system improvement.
+    }
+
+    \vspace{0.28cm}
+    \begin{itemize}
+      \item Diagnosis over ranking
+      \item Broader experimental use
+      \item Example: SPEC SERT
+    \end{itemize}
+  }
+}
+
+\contentslide{Three Benchmark Forms}{
+  \threecol{
+    \tagline{Specification-based}
+
+    \vspace{0.16cm}
+    Defines the problem, inputs, and expected outcomes. The submitter builds the implementation.
+
+    \vspace{0.2cm}
+    \soft{Flexible, but compliance is harder.}
+  }{
+    \tagline{Kit-based}
+
+    \vspace{0.16cm}
+    Provides the implementation as part of the official benchmark artifact.
+
+    \vspace{0.2cm}
+    \soft{Easy to run, but less open to innovation.}
+  }{
+    \tagline{Hybrid}
+
+    \vspace{0.16cm}
+    Provides most of the benchmark while allowing selected parts to vary.
+
+    \vspace{0.2cm}
+    \soft{A compromise between control and flexibility.}
+  }
+}
+
+\contentslide{The Design Thesis}{
+  \vfill
+  \callout{No single workload can be strong across every quality dimension. Benchmark design is a controlled compromise.}
+
+  \vspace{0.65cm}
+  \twocol{
+    \tagline{Narrow and faithful}
+    \begin{itemize}
+      \item High relevance in one domain
+      \item Lower breadth of applicability
+      \item Easier to interpret locally
+    \end{itemize}
+  }{
+    \tagline{Broad and portable}
+    \begin{itemize}
+      \item More systems can participate
+      \item Less precise for any one scenario
+      \item Easier to standardize widely
+    \end{itemize}
+  }
+}
+
+\sectionslide{Part 2}{Quality Criteria}
+
+\contentslide{The Five Criteria}{
+  \vspace{0.1cm}
+  \threecol{
+    \metric{1}{Relevance}
+  }{
+    \metric{2}{Reproducibility}
+  }{
+    \metric{3}{Fairness}
+  }
+
+  \vspace{0.75cm}
+  \twocol{
+    \metric{4}{Verifiability}
+  }{
+    \metric{5}{Usability}
+  }
+}
+
+\contentslide{1. Relevance}{
+  \callout{Does the benchmark behavior correlate with what consumers of the result actually care about?}
+
+  \vspace{0.38cm}
+  \twocol{
+    \tagline{Two dimensions}
+    \begin{itemize}
+      \item Breadth of applicability
+      \item Degree of domain fidelity
+      \item Scalability for server workloads
+    \end{itemize}
+  }{
+    \tagline{Design move}
+    \begin{itemize}
+      \item Start from intended use
+      \item Identify result consumers
+      \item Work backward from decisions they will make
+    \end{itemize}
+  }
+}
+
+\contentslide{2. Reproducibility}{
+  \callout{Reproducibility has two faces: repeated runs on the same setup, and equivalent runs by an independent tester.}
+
+  \vspace{0.35cm}
+  \twocol{
+    \tagline{Variability sources}
+    \begin{itemize}
+      \item Thread scheduling and JIT effects
+      \item Disk layout and network contention
+      \item Power management and temperature
+    \end{itemize}
+  }{
+    \tagline{Control mechanisms}
+    \begin{itemize}
+      \item Long enough steady-state runs
+      \item Multiple run requirements
+      \item Full hardware, software, and tuning disclosure
+    \end{itemize}
+  }
+}
+
+\contentslide{3. Fairness}{
+  \callout{Fairness means systems compete on their merits, not on benchmark loopholes.}
+
+  \vspace{0.35cm}
+  \twocol{
+    \tagline{Too restrictive}
+    \begin{itemize}
+      \item Excludes legitimate setups
+      \item Reduces participation
+      \item Narrows result usefulness
+    \end{itemize}
+  }{
+    \tagline{Too permissive}
+    \begin{itemize}
+      \item Rewards unrealistic configurations
+      \item Pollutes result pools
+      \item Encourages cherry-picked comparisons
+    \end{itemize}
+  }
+}
+
+\contentslide{4. Verifiability}{
+  \callout{Industry benchmark results are often produced by interested vendors; trust has to be engineered into the benchmark.}
+
+  \vspace{0.35cm}
+  \begin{itemize}
+    \item Runtime self-validation checks that the workload is behaving legally.
+    \item Functional output checks catch invalid optimizations.
+    \item Benchmark-collected configuration data is stronger than user-declared data.
+    \item Redundant result metadata can reveal inconsistencies in reported scores.
+  \end{itemize}
+}
+
+\contentslide{5. Usability}{
+  \callout{A benchmark that is too costly, complex, or fragile to run will not become a useful standard.}
+
+  \vspace{0.35cm}
+  \twocol{
+    \tagline{Cost barrier}
+    \begin{itemize}
+      \item Large benchmarks may require specialized systems
+      \item TPC-C examples can reach enterprise-scale cost
+      \item High cost reduces participation
+    \end{itemize}
+  }{
+    \tagline{Usability mechanisms}
+    \begin{itemize}
+      \item Self-validation
+      \item Load-and-go benchmark kits
+      \item Automated configuration collection
+    \end{itemize}
+  }
+}
+
+\sectionslide{Part 3}{Tensions}
+
+\contentslide{Criteria Pull Against Each Other}{
+  \twocol{
+    \tagline{Relevance vs. reproducibility}
+
+    \soft{Realistic workloads often introduce more variability.}
+
+    \vspace{0.35cm}
+    \tagline{Relevance vs. usability}
+
+    \soft{Representative workloads can demand expensive systems.}
+
+    \vspace{0.35cm}
+    \tagline{Fairness vs. relevance}
+
+    \soft{Run rules can exclude legitimate real-world configurations.}
+  }{
+    \tagline{Verifiability vs. usability}
+
+    \soft{More validation and reporting adds friction.}
+
+    \vspace{0.35cm}
+    \tagline{Specificity vs. breadth}
+
+    \soft{High domain fidelity usually narrows applicability.}
+
+    \vspace{0.35cm}
+    \callout{The point is not to eliminate trade-offs. The point is to make them deliberate.}
+  }
+}
+
+\contentslide{The Governance Point}{
+  \vfill
+  \callout{Consensus is not just bureaucracy. In standardized benchmarking, governance is one of the mechanisms that makes fairness credible.}
+
+  \vspace{0.6cm}
+  \begin{itemize}
+    \item Committees force trade-offs to be negotiated across stakeholders.
+    \item Run rules define what counts as a valid result.
+    \item Fair-use policies govern how results may be compared publicly.
+  \end{itemize}
+}
+
+\sectionslide{Part 4}{For Our Work}
+
+\contentslide{How This Maps to Our Project}{
+  \twocol{
+    \tagline{Early decision}
+    \begin{itemize}
+      \item Are we building a benchmark or a rating tool?
+      \item Are we ranking systems or diagnosing behavior?
+      \item Who consumes the result?
+    \end{itemize}
+  }{
+    \tagline{SUT definition}
+    \begin{itemize}
+      \item Hardware and firmware
+      \item OS, compiler, drivers, libraries
+      \item Runtime settings and tuning knobs
+    \end{itemize}
+  }
+}
+
+\contentslide{Modern Pressure Points}{
+  \begin{itemize}
+    \item \tagline{ML nondeterminism:} random seeds, data shuffling, and floating-point non-associativity complicate reproducibility.
+    \item \tagline{Cloud systems:} the boundary of the system under test becomes harder to describe.
+    \item \tagline{Energy metrics:} power management and temperature make measurement variability worse.
+    \item \tagline{MLPerf-style divisions:} closed/open rules are fairness mechanisms, but they also shape interpretation.
+  \end{itemize}
+}
+
+\contentslide{Final Takeaways}{
+  \vspace{0.2cm}
+  \begin{enumerate}
+    \item Define the intended use before choosing workloads.
+    \item Treat workload, metric, run rules, validation, and reporting as one system.
+    \item Make trade-offs explicit; they are not defects if they are justified.
+    \item Prefer reproducible evidence over isolated headline numbers.
+  \end{enumerate}
+
+  \vspace{0.5cm}
+  \callout{A strong benchmark does not merely measure performance. It creates evidence other people can interpret, challenge, and reproduce.}
+}
+
+\contentslide{Discussion}{
+  \Large
+  \begin{enumerate}
+    \item Which benchmark type fits our project: specification, kit, or hybrid?
+    \item Which quality criterion is most at risk for us?
+    \item What should be standardized first: workload, metric, environment, or reporting?
+  \end{enumerate}
+
+  \vspace{0.55cm}
+  {\normalsize\color{MutedGold}\presenter}
+
+  \vspace{0.1cm}
+  {\small\color{SlateGrey}\repoid}
+
+  \label{LastSlide}
+}
+
+\end{document}

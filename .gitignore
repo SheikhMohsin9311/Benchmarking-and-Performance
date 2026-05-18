@@ -75,3 +75,5 @@ Testing/
 .continue/
 .aider*
 CLAUDE.local.md
+.tex
+.log
