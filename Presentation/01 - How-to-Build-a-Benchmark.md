@@ -39,6 +39,7 @@ Example: SPEC's **SERT** (Server Efficiency Rating Tool) — designed like a ben
 
 ---
 
+
 ## 3. Benchmark Taxonomy (Three Types)
 
 ### 3.1 Specification-Based
